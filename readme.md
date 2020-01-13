@@ -1,35 +1,26 @@
-# INF99X: Sample Course
+﻿**GitHub 소개**
 
-- **[Download Latest Student Handbook and AllFiles Content](../../releases/latest)**
-- **Are you a MCT?** - Have a look at our [GitHub User Guide for MCTs](https://microsoftlearning.github.io/MCT-User-Guide/)
-- **Need to manually build the lab instructions?** - Instructions are available in the [MicrosoftLearning/Docker-Build](https://github.com/MicrosoftLearning/Docker-Build) repository
+*	코스 작성자와 MCT가 상호 작용을 할 수 있도록 GitHub에 랩 지침과 랩 파일을 게시하고 있습니다. 이를 통해 Azure 플랫폼이 변경되어도 콘텐츠를 최신 상태로 유지하기 위해 노력하고 있습니다.
 
-## What are we doing?
+*	AZ-300: Microsoft Azure 아키텍트 기술 및 AZ-301: Microsoft Azure 아키텍트 설계 과정용 GitHub 리포지토리를 이용할 수 있습니다.
 
-- To support this course, we will need to make frequent updates to the course content to keep it current with the Azure services used in the course.  We are publishing the lab instructions and lab files on GitHub to allow for open contributions between the course authors and MCTs to keep the content current with changes in the Azure platform.
+*	각 리포지토리 내에는 PDF 형식으로 된 랩 가이드가 포함되어 있습니다. 해당하는 경우 랩을 완료하는 데 필요한 추가 파일이 포함된 압축 파일도 함께 제공됩니다. 모든 과정에서 압축 파일이 제공되는 것은 아닙니다. 
 
-- We hope that this brings a sense of collaboration to the labs like we've never had before - when Azure changes and you find it first during a live delivery, go ahead and make an enhancement right in the lab source.  Help your fellow MCTs.
+*	교육 담당자는 제공되는 각 콘텐츠와 관련하여 GitHub에서 최신 파일을 다운로드해야 합니다. 또한 문제 탭에서 다른 MCT가 오류를 보고했는지도 확인해야 합니다.  
 
-## How should I use these files relative to the released MOC files?
+*	예상 랩 소요 시간이 제공되기는 하지만, 교육 담당자는 대상 그룹을 기준으로 해당 시간이 정확한지를 확인해야 합니다.
 
-- The instructor handbook and PowerPoints are still going to be your primary source for teaching the course content.
+*	과정의 일관성을 유지하고 랩을 편리하게 진행할 수 있도록 랩 콘텐츠는 과정 끝부분에 포함되었습니다. 그러나 랩을 제공해야 하는 가장 적절한 시기는 강사가 결정해야 합니다.
 
-- These files on GitHub are designed to be used in conjunction with the student handbook, but are in GitHub as a central repository so MCTs and course authors can have a shared source for the latest lab files.
+*	랩을 진행하려면 인터넷에 연결할 수 있어야 하며 Azure 구독을 보유하고 있어야 합니다. 자세한 내용은 강사 준비 가이드를 참조하세요. 
 
-- It will be recommended that for every delivery, trainers check GitHub for any changes that may have been made to support the latest Azure services, and get the latest files for their delivery.
+*	학생들이 GitHub 리포지토리를 방문하도록 주소를 제공하는 방식이 아니라, 이러한 자료를 학생들에게 직접 제공하는 것이 좋습니다. 
 
-## What about changes to the student handbook?
+**GitHub 운영 방식**
 
-- We will review the student handbook on a quarterly basis and update through the normal MOC release channels as needed.
+*	이러한 과정의 교육을 진행하면서 개선이 필요한 부분이 확인되면 문제 탭을 통해 피드백을 제공해 주시기 바랍니다. Microsoft에서는 정기적으로 새 파일을 만들어 변경 내용을 통합합니다. 
 
-## How do I contribute?
+이 GitHub 리포지토리를 활용하여 랩에서 공동 작업을 원활하게 진행하고 전반적인 랩 환경 품질을 개선하시기 바랍니다. 
 
-- Any MCT can submit a pull request to the code or content in the GitHub repro, Microsoft and the course author will triage and include content and lab code changes as needed.
-
-- You can submit bugs, changes, improvement and ideas.  Find a new Azure feature before we have?  Submit a new demo!
-
-## Notes
-
-### Classroom Materials
-
-It is strongly recommended that MCTs and Partners access these materials and in turn, provide them separately to students.  Pointing students directly to GitHub to access Lab steps as part of an ongoing class will require them to access yet another UI as part of the course, contributing to a confusing experience for the student. An explanation to the student regarding why they are receiving separate Lab instructions can highlight the nature of an always-changing cloud-based interface and platform. Microsoft Learning support for accessing files on GitHub and support for navigation of the GitHub site is limited to MCTs teaching this course only.
+감사합니다.
+Azure 아키텍트 교육 과정 자료 팀

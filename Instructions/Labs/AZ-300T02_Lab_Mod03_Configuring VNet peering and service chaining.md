@@ -1,0 +1,276 @@
+﻿---
+lab:
+    title: 'VNet 피어링 및 서비스 체이닝 구성'
+    module: '모듈 3: 고급 가상 네트워킹 구현'
+---
+
+# 가상 네트워크 구성 및 관리
+# 랩: VNet 피어링 및 서비스 체이닝 구성
+  
+### 시나리오
+  
+ADatum Corporation은 Azure 구독 내 Azure 가상 네트워크 간의 서비스 체이닝을 구현하려고 합니다. 
+
+
+### 목표
+  
+이 랩을 완료하면 다음 작업을 수행할 수 있습니다.
+
+- Azure Resource Manager 템플릿을 사용하여 Azure VM 배포
+
+- VNet 피어링 구성
+
+- 라우팅 구현
+
+- 서비스 체이닝 유효성 검사
+
+
+### 랩 설정
+  
+예상 소요 시간: 45분
+
+사용자 이름: **Student**
+
+암호: **Pa55w.rd**
+
+
+
+## 연습 1: 배포 템플릿을 사용하여 Azure 랩 환경 만들기
+  
+이 연습의 주요 태스크는 다음과 같습니다.
+
+1. Azure Resource Manager 템플릿을 사용하여 첫 번째 Azure 가상 네트워크 환경 만들기
+
+1. Azure Resource Manager 템플릿을 사용하여 두 번째 Azure 가상 네트워크 환경 만들기
+
+
+#### 태스크 1: Azure Resource Manager 템플릿을 사용하여 첫 번째 Azure 가상 네트워크 환경 만들기
+  
+1. 랩 가상 머신에서 Microsoft Edge를 시작하여 Azure Portal([**http://portal.azure.com**](http://portal.azure.com))로 이동한 다음 대상 Azure 구독에서 소유자 역할이 지정된 Microsoft 계정을 사용하여 로그인합니다.
+
+1. Microsoft Edge 창에 표시된 Azure Portal을 통해 **Cloud Shell** 내에서 **Bash** 세션을 시작합니다. 
+
+1. **탑재된 스토리지가 없음** 메시지가 표시되면 다음 설정을 사용하여 스토리지를 구성합니다.
+
+    - 구독: 대상 Azure 구독의 이름
+
+    - Cloud Shell 지역: 구독에서 사용할 수 있으며 랩 위치에 가장 가까운 Azure 지역의 이름
+
+    - 리소스 그룹: 새 리소스 그룹 **az3000400-LabRG** 의 이름
+
+    - 스토리지 계정: 새 스토리지 계정의 이름
+
+    - 파일 공유: 새 파일 공유의 이름
+
+1. Cloud Shell 창에서 다음 명령을 실행하여 리소스 그룹 두 개를 만듭니다. 여기서 `<Azure region>` 자리 표시자는 구독에서 사용할 수 있으며 랩 위치에 가장 가까운 Azure 지역의 이름으로 바꿉니다.
+
+```
+   az group create --resource-group az3000401-LabRG --location <Azure region>
+   az group create --resource-group az3000402-LabRG --location <Azure region>
+```
+
+1. Cloud Shell 창에서 첫 번째 Azure Resource Manager 템플릿 **\\allfiles\\AZ-300T02\\Module_03\\azuredeploy0401.json** 을 홈 디렉터리에 업로드합니다.
+
+1. Cloud Shell 창에서 매개 변수 파일 **\\allfiles\\AZ-300T02\\Module_03\\azuredeploy04.parameters.json** 을 홈 디렉터리에 업로드합니다.
+
+1. Cloud Shell 창에서 다음 명령을 실행하여 Windows Server 2016 Datacenter를 호스트하는 Azure VM 2개를 첫 번째 가상 네트워크에 배포합니다.
+
+```
+   az group deployment create --resource-group az3000401-LabRG --template-file azuredeploy0401.json --parameters @azuredeploy04.parameters.json --no-wait
+```
+
+    > **참고**: 배포가 완료될 때까지 기다리지 말고 다음 태스크를 진행하세요.
+
+
+#### 작업 2: Azure Resource Manager 템플릿을 사용하여 두 번째 Azure 가상 네트워크 환경 만들기
+
+1. Cloud Shell 창에서 두 번째 Azure Resource Manager 템플릿 **\\allfiles\\AZ-300T02\\Module_03\\azuredeploy0402.json** 을 홈 디렉터리에 업로드합니다.
+
+1. Cloud Shell 창에서 다음 명령을 실행하여 Windows Server 2016 Datacenter를 호스트하는 Azure VM을 두 번째 가상 네트워크에 배포합니다.
+
+```
+   az group deployment create --resource-group az3000402-LabRG --template-file azuredeploy0402.json --parameters @azuredeploy04.parameters.json --no-wait
+```
+
+    > **참고**: 두 번째 템플릿도 같은 매개 변수 파일을 사용합니다. 
+
+    > **참고**: 배포가 완료될 때까지 기다리지 말고 다음 연습을 진행하세요.
+
+> **결과**: Windows Server 2016 Datacenter를 실행 중인 Azure VM을 호스트하는 Azure 가상 네트워크 2개를 만들어 이 연습을 완료해야 합니다. 
+
+
+## 연습 2: VNet 피어링 구성 
+  
+이 연습의 태스크는 다음과 같습니다.
+
+1. 두 가상 네트워크용으로 VNet 피어링 구성
+
+#### 태스크 1: 두 가상 네트워크용으로 VNet 피어링 구성
+  
+1. Azure Portal이 표시된 Microsoft Edge 창에서 **az3000401-vnet** 가상 네트워크 블레이드로 이동합니다.
+
+1. **az3000401-vnet** 블레이드에서 다음 설정을 사용하여 VNet 피어링을 만듭니다.
+
+    - 첫 번째 가상 네트워크에서 두 번째 가상 네트워크로의 피어링 이름: **az3000401-vnet-to-az3000402-vnet**
+
+    - 가상 네트워크 배포 모델: **Resource Manager**
+
+    - 구독: 이 랩에 사용 중인 Azure 구독의 이름
+
+    - 가상 네트워크: **az3000402-vnet**
+    
+    - 두 번째 가상 네트워크에서 첫 번째 가상 네트워크로의 피어링 이름: **az3000402-vnet-to-az3000401-vnet**    
+    
+    - 첫 번째 가상 네트워크에서 두 번째 가상 네트워크로의 가상 네트워크 액세스 허용: **사용**
+    
+    - 두 번째 가상 네트워크에서 첫 번째 가상 네트워크로의 가상 네트워크 액세스 허용: **사용**    
+
+    - 첫 번째 가상 네트워크에서 두 번째 가상 네트워크로 전달된 트래픽 허용: **사용 안 함**
+    
+    - 두 번째 가상 네트워크에서 첫 번째 가상 네트워크로 전달된 트래픽 허용: **사용 안 함**
+
+    - 게이트웨이 전송 허용: 사용 안 함
+
+## 연습 3: 라우팅 구현
+  
+이 연습의 주요 태스크는 다음과 같습니다.
+
+1. IP 전달 사용
+
+1. 사용자 정의 라우팅 구성 
+
+1. Windows Server 2016을 실행하는 Azure VM에서 라우팅 구성
+
+
+#### 태스크 1: IP 전달 사용 
+  
+1. Microsoft Edge에서 **az3000401-nic2** 블레이드(**az3000401-vm2** 의 NIC)로 이동합니다.
+
+1. **az3000401-nic2** 블레이드에서 **IP 전달** 을 **사용** 으로 설정하여 **IP 구성** 을 수정합니다.
+
+
+#### 태스크 2: 사용자 정의 라우팅 구성 
+
+1. Azure Portal에서 다음 설정을 사용하여 새 경로 테이블을 만듭니다.
+
+    - 이름: **az3000402-rt1**
+
+    - 구독: 이 랩에 사용하는 Azure 구독의 이름
+
+    - 리소스 그룹: **az3000402-LabRG**
+
+    - 위치: 가상 네트워크를 만든 것과 같은 Azure 지역
+  
+    - 가상 네트워크 게이트웨이 경로 전파: **사용 안 함**
+    
+    경로 테이블 만들기를 마쳤으면 **리소스로 이동**을 클릭합니다.
+
+1. Azure Portal에서 이전 단계에서 만든 az3000402-rt1 경로 테이블로 이동하고 **설정**에서 **경로**를 클릭한 후 다음과 같은 설정으로 경로를 추가합니다. 
+
+    - 경로 이름: **custom-route-to-az3000401-vnet**
+
+    - 주소 접두사: **10.0.0.0/22**
+
+    - 다음 홉 유형: **가상 어플라이언스**
+
+    - 다음 홉 주소: **10.0.1.4**
+
+1. Azure Portal에서 **az3000402-vnet** 의 **subnet-1** 과 경로 테이블을 연결합니다.
+
+
+#### 태스크 3: Windows Server 2016을 실행하는 Azure VM에서 라우팅 구성
+
+1. 랩 컴퓨터에서 Azure Portal을 실행한 후 **az3000401-vm2** Azure VM에 대한 원격 데스크톱 세션을 시작합니다. 
+
+1. 인증하라는 메시지가 표시되면 다음 자격 증명을 지정합니다.
+
+    - 사용자 이름: **Student**
+
+    - 암호: **Pa55w.rd1234**
+
+1. 원격 데스크톱 세션을 통해 az3000401-vm2에 연결되면 **서버 관리자** 에서 **라우팅** 역할 서비스 및 모든 필수 기능이 포함된 **원격 액세스** 서버 역할을 설치합니다. 
+
+1. az3000401-vm2로의 원격 데스크톱 세션에서 **라우팅 및 원격 액세스** 콘솔을 시작합니다. 
+
+1. **라우팅 및 원격 액세스** 콘솔에서 az3000401-vm2 서버의 이름을 마우스 오른쪽 단추로 클릭하고 **라우팅 및 원격 액세스 구성 및 사용**을 선택하여 **라우팅 및 원격 액세스 서버 설치 마법사**를 실행합니다.
+
+1. **라우팅 및 원격 액세스 서버 설치 마법사**에서 **구성**의 **사용자 지정 구성**을 선택하고 **LAN 라우팅**을 사용하도록 설정합니다. 
+
+1. **라우팅 및 원격 액세스** 서비스를 시작합니다.
+
+1. az3000401-vm2로의 원격 데스크톱 세션에서 **고급 보안이 포함된 Windows 방화벽** 콘솔을 시작한 다음 모든 프로필에 대해 **파일 및 프린터 공유(에코 요청 - ICMPv4-In)** 인바운드 규칙을 사용하도록 설정합니다.
+
+> **결과**: 두 번째 가상 네트워크 내에서 사용자 지정 라우팅을 구성하여 이 연습을 완료해야 합니다.
+
+
+## 연습 4: 서비스 체이닝 유효성 검사
+  
+이 연습의 주요 태스크는 다음과 같습니다.
+
+1. Azure VM에서 고급 보안이 포함된 Windows 방화벽 구성
+
+1. 피어링된 가상 네트워크 간의 서비스 체이닝 테스트
+
+
+#### 태스크 1: 대상 Azure VM에서 고급 보안이 포함된 Windows 방화벽 구성
+  
+1. 랩 컴퓨터에서 Azure Portal을 실행한 후 **az3000401-vm1** Azure VM에 대한 원격 데스크톱 세션을 시작합니다. 
+
+1. 인증하라는 메시지가 표시되면 다음 자격 증명을 지정합니다.
+
+    - 사용자 이름: **Student**
+
+    - 암호: **Pa55w.rd1234**
+
+1. az3000401-vm1로의 원격 데스크톱 세션에서 **고급 보안이 포함된 Windows 방화벽** 콘솔을 시작한 다음 모든 프로필에 대해 **파일 및 프린터 공유(에코 요청 - ICMPv4-In)** 인바운드 규칙을 사용하도록 설정합니다.
+
+
+#### 태스크 2: 피어링된 가상 네트워크 간의 서비스 체이닝 테스트
+  
+1. 랩 컴퓨터에서 Azure Portal을 실행한 후 **az3000402-vm1** Azure VM에 대한 원격 데스크톱 세션을 시작합니다. 
+
+1. 인증하라는 메시지가 표시되면 다음 자격 증명을 지정합니다.
+
+    - 사용자 이름: **Student**
+
+    - 암호: **Pa55w.rd1234**
+
+1. 원격 데스크톱 세션을 통해 az3000402-vm1에 연결되면 **Windows PowerShell** 을 시작합니다.
+
+1. **Windows PowerShell** 창에서 다음 명령을 실행합니다.
+
+```pwsh
+   Test-NetConnection -ComputerName 10.0.0.4 -TraceRoute
+```
+
+1. 테스트가 정상적으로 완료되었으며 연결이 10.0.1.4를 통해 라우팅되었는지 확인합니다.
+
+>  **결과**: 피어링된 가상 네트워크 간의 서비스 체이닝 유효성을 검사하여 이 연습을 완료해야 합니다.
+
+## 연습 5: 랩 리소스 제거
+
+#### 작업 1: Cloud Shell 열기
+
+1. 포털 상단에서 **Cloud Shell** 아이콘을 클릭하여 Clould Shell 창을 엽니다.
+
+1. 필요한 경우 Cloud Shell 창의 왼쪽 상단에 있는 드롭다운 목록을 사용하여 Bash 셸 세션으로 전환하십시오.
+
+1. **Cloud Shell** 명령 프롬프트에서 다음 명령을 입력하고 **Enter** 키를 눌러 이 랩에서 만든 모든 리소스 그룹을 나열합니다.
+
+```
+   az group list --query "[?starts_with(name,'az30004')]".name --output tsv
+```
+
+1. 출력에 이 랩에서 만든 리소스 그룹만 포함되어 있는지 확인합니다. 이러한 그룹은 다음 작업에서 삭제됩니다.
+
+#### 작업 2: 리소스 그룹 삭제 
+
+1. **Cloud Shell** 명령 프롬프트에서 다음 명령을 입력하고 **Enter** 키를 눌러 이 랩에서 만든 리소스 그룹을 삭제합니다.
+
+```sh
+   az group list --query "[?starts_with(name,'az30004')]".name --output tsv | xargs -L1 bash -c 'az group delete --name $0 --no-wait --yes'
+```
+
+1. 포털 하단의 **Cloud Shell** 프롬프트를 닫습니다.
+
+> **결과**: 이 연습에서는 이 랩에서 사용한 리소스를 제거했습니다.
