@@ -1,15 +1,9 @@
-﻿---
-lab:
-    title: 'VNet 피어링 및 서비스 체이닝 구성'
-    module: '모듈 3: 고급 가상 네트워킹 구현'
----
-
-# 가상 네트워크 구성 및 관리
+﻿# 가상 네트워크 구성 및 관리
 # 랩: VNet 피어링 및 서비스 체이닝 구성
   
 ### 시나리오
   
-ADatum Corporation은 Azure 구독 내 Azure 가상 네트워크 간의 서비스 체이닝을 구현하려고 합니다. 
+ADatum 회사에서는 Azure 구독 내 Azure 가상 네트워크 간의 서비스 연결을 구현하려고 합니다. 
 
 
 ### 목표
@@ -27,9 +21,9 @@ ADatum Corporation은 Azure 구독 내 Azure 가상 네트워크 간의 서비�
 
 ### 랩 설정
   
-예상 소요 시간: 45분
+예상 시간: 45분
 
-사용자 이름: **Student**
+사용자 이름: **학생**
 
 암호: **Pa55w.rd**
 
@@ -44,9 +38,9 @@ ADatum Corporation은 Azure 구독 내 Azure 가상 네트워크 간의 서비�
 1. Azure Resource Manager 템플릿을 사용하여 두 번째 Azure 가상 네트워크 환경 만들기
 
 
-#### 태스크 1: Azure Resource Manager 템플릿을 사용하여 첫 번째 Azure 가상 네트워크 환경 만들기
+#### 작업 1: Azure Resource Manager 템플릿을 사용하여 첫 번째 Azure 가상 네트워크 환경 만들기
   
-1. 랩 가상 머신에서 Microsoft Edge를 시작하여 Azure Portal([**http://portal.azure.com**](http://portal.azure.com))로 이동한 다음 대상 Azure 구독에서 소유자 역할이 지정된 Microsoft 계정을 사용하여 로그인합니다.
+1. 랩 가상 머신에서 Microsoft Edge를 시작하여 Azure Portal [**http://portal.azure.com**](http://portal.azure.com) 로 이동한 다음 대상 Azure 구독에서 소유자 역할이 지정된 Microsoft 계정을 사용하여 로그인합니다.
 
 1. Microsoft Edge 창에 표시된 Azure Portal을 통해 **Cloud Shell** 내에서 **Bash** 세션을 시작합니다. 
 
@@ -54,9 +48,9 @@ ADatum Corporation은 Azure 구독 내 Azure 가상 네트워크 간의 서비�
 
     - 구독: 대상 Azure 구독의 이름
 
-    - Cloud Shell 지역: 구독에서 사용할 수 있으며 랩 위치에 가장 가까운 Azure 지역의 이름
+    - Cloud Shell 지역: 구독에서 사용할 수 있고 랩 위치에 가장 가까운 Azure 지역의 이름입니다.
 
-    - 리소스 그룹: 새 리소스 그룹 **az3000400-LabRG** 의 이름
+    - 리소스 그룹: 새 리소스 그룹 **az3000400-LabRG**의 이름
 
     - 스토리지 계정: 새 스토리지 계정의 이름
 
@@ -64,37 +58,40 @@ ADatum Corporation은 Azure 구독 내 Azure 가상 네트워크 간의 서비�
 
 1. Cloud Shell 창에서 다음 명령을 실행하여 리소스 그룹 두 개를 만듭니다. 여기서 `<Azure region>` 자리 표시자는 구독에서 사용할 수 있으며 랩 위치에 가장 가까운 Azure 지역의 이름으로 바꿉니다.
 
-```
+   ```
    az group create --resource-group az3000401-LabRG --location <Azure region>
+   ```
+
+   ```
    az group create --resource-group az3000402-LabRG --location <Azure region>
-```
+   ```
 
-1. Cloud Shell 창에서 첫 번째 Azure Resource Manager 템플릿 **\\allfiles\\AZ-300T02\\Module_03\\azuredeploy0401.json** 을 홈 디렉터리에 업로드합니다.
+1. Cloud Shell 창에서 첫 번째 Azure Resource Manager 템플릿 **\\allfiles\\AZ-300T02\\Module_03\\azuredeploy0401.json**을 홈 디렉터리에 업로드합니다.
 
-1. Cloud Shell 창에서 매개 변수 파일 **\\allfiles\\AZ-300T02\\Module_03\\azuredeploy04.parameters.json** 을 홈 디렉터리에 업로드합니다.
+1. Cloud Shell 창에서 매개 변수 파일 **\\allfiles\\AZ-300T02\\Module_03\\azuredeploy04.parameters.json**을 홈 디렉터리에 업로드합니다.
 
 1. Cloud Shell 창에서 다음 명령을 실행하여 Windows Server 2016 Datacenter를 호스트하는 Azure VM 2개를 첫 번째 가상 네트워크에 배포합니다.
 
-```
-   az group deployment create --resource-group az3000401-LabRG --template-file azuredeploy0401.json --parameters @azuredeploy04.parameters.json --no-wait
-```
+   ```
+   az deployment group create --resource-group az3000401-LabRG --template-file azuredeploy0401.json --parameters @azuredeploy04.parameters.json --no-wait
+   ```
 
-    > **참고**: 배포가 완료될 때까지 기다리지 말고 다음 태스크를 진행하세요.
+    > **참고**: 배포가 완료될 때까지 기다리지 말고 다음 작업을 진행하세요.
 
 
 #### 작업 2: Azure Resource Manager 템플릿을 사용하여 두 번째 Azure 가상 네트워크 환경 만들기
 
-1. Cloud Shell 창에서 두 번째 Azure Resource Manager 템플릿 **\\allfiles\\AZ-300T02\\Module_03\\azuredeploy0402.json** 을 홈 디렉터리에 업로드합니다.
+1. Cloud Shell 창에서 두 번째 Azure Resource Manager 템플릿 **\\allfiles\\AZ-300T02\\Module_03\\azuredeploy0402.json**을 홈 디렉터리에 업로드합니다.
 
 1. Cloud Shell 창에서 다음 명령을 실행하여 Windows Server 2016 Datacenter를 호스트하는 Azure VM을 두 번째 가상 네트워크에 배포합니다.
 
-```
-   az group deployment create --resource-group az3000402-LabRG --template-file azuredeploy0402.json --parameters @azuredeploy04.parameters.json --no-wait
-```
+   ```
+   az deployment group create --resource-group az3000402-LabRG --template-file azuredeploy0402.json --parameters @azuredeploy04.parameters.json --no-wait
+   ```
 
     > **참고**: 두 번째 템플릿도 같은 매개 변수 파일을 사용합니다. 
 
-    > **참고**: 배포가 완료될 때까지 기다리지 말고 다음 연습을 진행하세요.
+    > **참고**: 배포가 완료될 때까지 기다리지 말고 다음 실행을 진행하세요.
 
 > **결과**: Windows Server 2016 Datacenter를 실행 중인 Azure VM을 호스트하는 Azure 가상 네트워크 2개를 만들어 이 연습을 완료해야 합니다. 
 
@@ -105,7 +102,7 @@ ADatum Corporation은 Azure 구독 내 Azure 가상 네트워크 간의 서비�
 
 1. 두 가상 네트워크용으로 VNet 피어링 구성
 
-#### 태스크 1: 두 가상 네트워크용으로 VNet 피어링 구성
+#### 작업 1: 두 가상 네트워크용으로 VNet 피어링 구성
   
 1. Azure Portal이 표시된 Microsoft Edge 창에서 **az3000401-vnet** 가상 네트워크 블레이드로 이동합니다.
 
@@ -142,14 +139,14 @@ ADatum Corporation은 Azure 구독 내 Azure 가상 네트워크 간의 서비�
 1. Windows Server 2016을 실행하는 Azure VM에서 라우팅 구성
 
 
-#### 태스크 1: IP 전달 사용 
+#### 작업 1: IP 전달 사용 
   
-1. Microsoft Edge에서 **az3000401-nic2** 블레이드(**az3000401-vm2** 의 NIC)로 이동합니다.
+1. Microsoft Edge에서 **az3000401-nic2** 블레이드(**az3000401-vm2**의 NIC)로 이동합니다.
 
-1. **az3000401-nic2** 블레이드에서 **IP 전달** 을 **사용** 으로 설정하여 **IP 구성** 을 수정합니다.
+1. **az3000401-nic2** 블레이드에서 **IP 전달**을 **사용**으로 설정하여 **IP 구성**을 수정합니다.
 
 
-#### 태스크 2: 사용자 정의 라우팅 구성 
+#### 작업 2: 사용자 정의 라우팅 구성. 
 
 1. Azure Portal에서 다음 설정을 사용하여 새 경로 테이블을 만듭니다.
 
@@ -175,35 +172,61 @@ ADatum Corporation은 Azure 구독 내 Azure 가상 네트워크 간의 서비�
 
     - 다음 홉 주소: **10.0.1.4**
 
-1. Azure Portal에서 **az3000402-vnet** 의 **subnet-1** 과 경로 테이블을 연결합니다.
+1. Azure Portal에서 **az3000402-vnet**의 **subnet-1**과 경로 테이블을 연결합니다.
 
 
-#### 태스크 3: Windows Server 2016을 실행하는 Azure VM에서 라우팅 구성
+#### 작업 3: Windows Server 2016을 실행하는 Azure VM에서 라우팅 구성
 
-1. 랩 컴퓨터에서 Azure Portal을 실행한 후 **az3000401-vm2** Azure VM에 대한 원격 데스크톱 세션을 시작합니다. 
+1. 랩 컴퓨터에서 Azure Portal을 실행한 후 **az3000401-vm2** Azure VM 에 대한 원격 데스크톱 세션을 시작합니다. 
 
 1. 인증하라는 메시지가 표시되면 다음 자격 증명을 지정합니다.
 
-    - 사용자 이름: **Student**
+    - 사용자 이름: **학생**
 
     - 암호: **Pa55w.rd1234**
 
-1. 원격 데스크톱 세션을 통해 az3000401-vm2에 연결되면 **서버 관리자** 에서 **라우팅** 역할 서비스 및 모든 필수 기능이 포함된 **원격 액세스** 서버 역할을 설치합니다. 
+1. 원격 데스크톱 세션을 통해 az3000401-vm2 에 연결되면 **원격 액세스** 역할을 설치합니다. 서버 관리자에서 **관리**를 클릭한 다음 **역할 및 기능 추가**를 클릭합니다.
 
-1. az3000401-vm2로의 원격 데스크톱 세션에서 **라우팅 및 원격 액세스** 콘솔을 시작합니다. 
+1. 화면을 시작하기 전에 **다음**을 클릭합니다.
+
+1. 설치 유형 화면에서  기본 **역할 기반 또는 기능 기반 설치**를 그대로 두고 **다음**을 클릭합니다.
+
+1. 서버 선택 화면에서 선택한 기본 서버를 그대로 두고 **다음**을 클릭합니다.
+
+1. 서버 역할 화면에서 **원격 액세스** 옆에 확인 표시를 배치한 후 **다음**을 클릭합니다.
+
+1. 기능 화면에서 선택한 기본값을 그대로 두고 **다음**을 클릭합니다.
+
+1. 원격 액세스 화면에서 **다음**을 클릭합니다.
+
+1. 서비스 화면에서 **라우팅** 옆에 확인 표시를 배치한 후 **다음**을 클릭합니다.
+
+1. 확인 화면에서 **다음**을 클릭합니다.
+
+1. 결과 화면에서 **설치**를 클릭합니다.
+
+1. az3000401-vm2에 대한 원격 데스크톱 세션의 서버 관리자에서 **도구**를 클릭한 다음 **라우팅 및 원격 액세스**를 클릭하여 RRAS 콘솔을 엽니다. 
 
 1. **라우팅 및 원격 액세스** 콘솔에서 az3000401-vm2 서버의 이름을 마우스 오른쪽 단추로 클릭하고 **라우팅 및 원격 액세스 구성 및 사용**을 선택하여 **라우팅 및 원격 액세스 서버 설치 마법사**를 실행합니다.
 
 1. **라우팅 및 원격 액세스 서버 설치 마법사**에서 **구성**의 **사용자 지정 구성**을 선택하고 **LAN 라우팅**을 사용하도록 설정합니다. 
 
+> **참고**: 경고 팝업이 수신되면 **확인**을 클릭합니다.
+
 1. **라우팅 및 원격 액세스** 서비스를 시작합니다.
 
-1. az3000401-vm2로의 원격 데스크톱 세션에서 **고급 보안이 포함된 Windows 방화벽** 콘솔을 시작한 다음 모든 프로필에 대해 **파일 및 프린터 공유(에코 요청 - ICMPv4-In)** 인바운드 규칙을 사용하도록 설정합니다.
+1. az3000401-vm2에 대한 원격 데스크톱 세션에서 시작을 클릭한 후 **Windows 관리 도구**를 클릭합니다.
 
-> **결과**: 두 번째 가상 네트워크 내에서 사용자 지정 라우팅을 구성하여 이 연습을 완료해야 합니다.
+1. 관리 도구에서 **고급 보안이 있는 Windows 방화벽** 콘솔을 시작합니다.
+
+1. 콘솔에서 **인바운드 규칙**을 클릭합니다.
+
+1. **파일 및 프린터 공유(에코 요청 - ICMPv4-In)** 인바운드 규칙을 찾아 해당 규칙을 마우스 오른쪽 단추로 클릭하고 **규칙 사용**을 클릭합니다.
+
+> **결과**: 이 연습을 완료한 후 두 번째 가상 네트워크 내에서 사용자 지정 라우팅을 구성했습니다.
 
 
-## 연습 4: 서비스 체이닝 유효성 검사
+## 연습 4: 서비스 연결 유효성 검사
   
 이 연습의 주요 태스크는 다음과 같습니다.
 
@@ -212,36 +235,36 @@ ADatum Corporation은 Azure 구독 내 Azure 가상 네트워크 간의 서비�
 1. 피어링된 가상 네트워크 간의 서비스 체이닝 테스트
 
 
-#### 태스크 1: 대상 Azure VM에서 고급 보안이 포함된 Windows 방화벽 구성
+#### 작업 1: 대상 Azure VM에서 고급 보안이 포함된 Windows 방화벽 구성
   
 1. 랩 컴퓨터에서 Azure Portal을 실행한 후 **az3000401-vm1** Azure VM에 대한 원격 데스크톱 세션을 시작합니다. 
 
 1. 인증하라는 메시지가 표시되면 다음 자격 증명을 지정합니다.
 
-    - 사용자 이름: **Student**
+    - 사용자 이름: **학생**
 
     - 암호: **Pa55w.rd1234**
 
 1. az3000401-vm1로의 원격 데스크톱 세션에서 **고급 보안이 포함된 Windows 방화벽** 콘솔을 시작한 다음 모든 프로필에 대해 **파일 및 프린터 공유(에코 요청 - ICMPv4-In)** 인바운드 규칙을 사용하도록 설정합니다.
 
 
-#### 태스크 2: 피어링된 가상 네트워크 간의 서비스 체이닝 테스트
+#### 작업 2: 피어링된 가상 네트워크 간의 서비스 연결 테스트
   
 1. 랩 컴퓨터에서 Azure Portal을 실행한 후 **az3000402-vm1** Azure VM에 대한 원격 데스크톱 세션을 시작합니다. 
 
 1. 인증하라는 메시지가 표시되면 다음 자격 증명을 지정합니다.
 
-    - 사용자 이름: **Student**
+    - 사용자 이름: **학생**
 
     - 암호: **Pa55w.rd1234**
 
-1. 원격 데스크톱 세션을 통해 az3000402-vm1에 연결되면 **Windows PowerShell** 을 시작합니다.
+1. 원격 데스크톱 세션을 통해 az3000402-vm1 에 연결되면 **Windows PowerShell**을 시작합니다.
 
 1. **Windows PowerShell** 창에서 다음 명령을 실행합니다.
 
-```pwsh
+   ```pwsh
    Test-NetConnection -ComputerName 10.0.0.4 -TraceRoute
-```
+   ```
 
 1. 테스트가 정상적으로 완료되었으며 연결이 10.0.1.4를 통해 라우팅되었는지 확인합니다.
 
@@ -251,25 +274,25 @@ ADatum Corporation은 Azure 구독 내 Azure 가상 네트워크 간의 서비�
 
 #### 작업 1: Cloud Shell 열기
 
-1. 포털 상단에서 **Cloud Shell** 아이콘을 클릭하여 Clould Shell 창을 엽니다.
+1. 포털 상단에서 **Cloud Shell** 아이콘을 클릭하여 Cloud Shell 창을 엽니다.
 
 1. 필요한 경우 Cloud Shell 창의 왼쪽 상단에 있는 드롭다운 목록을 사용하여 Bash 셸 세션으로 전환하십시오.
 
 1. **Cloud Shell** 명령 프롬프트에서 다음 명령을 입력하고 **Enter** 키를 눌러 이 랩에서 만든 모든 리소스 그룹을 나열합니다.
 
-```
+   ```
    az group list --query "[?starts_with(name,'az30004')]".name --output tsv
-```
+   ```
 
-1. 출력에 이 랩에서 만든 리소스 그룹만 포함되어 있는지 확인합니다. 이러한 그룹은 다음 작업에서 삭제됩니다.
+1. 이 랩에서 만든 리소스 그룹만 출력에 포함되어 있는지 확인합니다. 다음 태스크에서 이러한 그룹을 삭제합니다.
 
 #### 작업 2: 리소스 그룹 삭제 
 
-1. **Cloud Shell** 명령 프롬프트에서 다음 명령을 입력하고 **Enter** 키를 눌러 이 랩에서 만든 리소스 그룹을 삭제합니다.
+1. **Cloud Shell** 명령 프롬프트에 다음 명령을 입력하고 **Enter** 키를 눌러 이 랩에서 만든 리소스 그룹을 삭제합니다.
 
-```sh
+   ```sh
    az group list --query "[?starts_with(name,'az30004')]".name --output tsv | xargs -L1 bash -c 'az group delete --name $0 --no-wait --yes'
-```
+   ```
 
 1. 포털 하단의 **Cloud Shell** 프롬프트를 닫습니다.
 
